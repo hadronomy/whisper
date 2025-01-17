@@ -296,7 +296,7 @@ def transcribe(
         # Handle output path
         if output_path:
             output_path = Path(output_path)
-            if output_path.suffix[1:] not in OutputFormat._member_names_:
+            if output_path.suffix[1:] not in OutputFormat:
                 raise ValueError(f"Invalid output format: {output_path.suffix}")
             format = OutputFormat(output_path.suffix[1:])
         else:
