@@ -1,0 +1,27 @@
+[project]
+name = "transcribe"
+version = "0.1.0"
+description = "Transcribe audio from video files"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "ffmpeg-python>=0.2.0",
+    "gevent>=24.11.1",
+    "nemo-toolkit[asr]>=2.1.0",
+    "numpy>=2.0.2",
+    "omegaconf>=2.3.0",
+    "openai-whisper>=20240930",
+    "pyannote-audio>=3.3.2",
+    "rich>=13.9.4",
+    "torch>=2.5.1",
+    "torchaudio>=2.5.1",
+    "typer>=0.15.1",
+    "whisper>=1.1.10",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project.scripts]
+transcribe = "transcribe:app"
