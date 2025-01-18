@@ -3,11 +3,11 @@ name = "transcribe"
 version = "0.1.0"
 description = "Transcribe audio from video files"
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.11,<3.12"
 dependencies = [
+    "faster-whisper>=1.1.1",
     "ffmpeg-python>=0.2.0",
     "gevent>=24.11.1",
-    "nemo-toolkit[asr]>=2.1.0",
     "numpy>=2.0.2",
     "omegaconf>=2.3.0",
     "openai-whisper>=20240930",
@@ -25,3 +25,17 @@ build-backend = "hatchling.build"
 
 [project.scripts]
 transcribe = "transcribe:app"
+
+[tool.pixi.project]
+channels = ["conda-forge"]
+platforms = ["linux-64"]
+
+[tool.pixi.pypi-dependencies]
+transcribe = { path = ".", editable = true }
+
+[tool.pixi.tasks]
+
+[tool.pixi.dependencies]
+numba = ">=0.58.0"
+cudatoolkit = ">=11.8.0,<12"
+cudnn = ">=9.3.0.75,<10"

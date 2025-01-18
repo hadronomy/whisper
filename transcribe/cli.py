@@ -109,6 +109,7 @@ def transcribe(
             # Transcribe
             progress.update(transcribe_task, visible=True)
             result = transcribe_audio(audio_path, progress, transcribe_task, model_name)
+            logger.debug(f"Transcription result: {result}")
 
             # Perform diarization if requested
             if diarize:
@@ -190,6 +191,7 @@ def get_output_filename(
 def save_transcription(result: dict, output_path: Path, format: OutputFormat):
     """Save transcription in specified format."""
     try:
+        logger.info(f"Saving transcription to {output_path}")
         with open(output_path, "w", encoding="utf-8") as f:
             if format == OutputFormat.CSV:
                 writer = csv.writer(f, quoting=csv.QUOTE_MINIMAL, escapechar="\\")
