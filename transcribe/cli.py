@@ -135,7 +135,8 @@ def transcribe(
         console.print(
             f' ✔️ Transcription completed and saved to [bold]"{output_path}"[/bold]'
         )
-
+    except Exception as e:
+        logger.error(f"Transcription failed: {str(e)}")
     finally:
         # Cleanup temporary audio file
         if os.path.exists(audio_path):
