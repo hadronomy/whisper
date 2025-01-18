@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import csv
 import tempfile
 import warnings
 
@@ -107,9 +108,7 @@ def transcribe(
 
             # Transcribe
             progress.update(transcribe_task, visible=True)
-            result = transcribe_audio(
-                audio_path, progress, transcribe_task, model_name
-            )
+            result = transcribe_audio(audio_path, progress, transcribe_task, model_name)
 
             # Perform diarization if requested
             if diarize:
@@ -193,12 +192,17 @@ def save_transcription(result: dict, output_path: Path, format: OutputFormat):
     try:
         with open(output_path, "w", encoding="utf-8") as f:
             if format == OutputFormat.CSV:
-                f.write("start,end,speaker,text\n")
+                writer = csv.writer(f, quoting=csv.QUOTE_MINIMAL, escapechar="\\")
+                writer.writerow(["start", "end", "speaker", "text"])
                 for segment in result["segments"]:
                     for word in segment.get("words", []):
-                        speaker = segment.get("speaker", "UNKNOWN")
-                        f.write(
-                            f"{word['start']:.2f},{word['end']:.2f},{speaker},{word['word']}\n"
+                        writer.writerow(
+                            [
+                                f"{word['start']:.2f}",
+                                f"{word['end']:.2f}",
+                                segment.get("speaker", "UNKNOWN"),
+                                word["word"].strip(),
+                            ]
                         )
             elif format == OutputFormat.SRT:
                 for i, segment in enumerate(result["segments"], 1):
