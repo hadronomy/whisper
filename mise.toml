@@ -1,2 +1,2 @@
 [tools]
-uv = "latest"
+"cargo:pixi" = "latest"
