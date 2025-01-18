@@ -30,13 +30,13 @@ class RichTqdm:
 class Transcriber:
     def __init__(
         self,
-        model_name: str = "base",
+        model: str = "base",
         device: Optional[str] = None,
         batch_size: int = 8,
         default_language: Optional[str] = None,
     ):
         """Initialize transcriber with specified configuration."""
-        self.model_name = model_name
+        self.model = model
         self.device = device or DeviceManager.get_default_device()
         self.batch_size = batch_size
         self.default_language = default_language
@@ -46,9 +46,7 @@ class Transcriber:
     def pipeline(self) -> WhisperPipeline:
         """Lazy load the whisper pipeline."""
         if self._pipeline is None:
-            self._pipeline = WhisperPipeline(
-                self.model_name, self.device, self.batch_size
-            )
+            self._pipeline = WhisperPipeline(self.model, self.device, self.batch_size)
         return self._pipeline
 
     def transcribe(

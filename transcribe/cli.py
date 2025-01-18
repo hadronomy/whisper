@@ -47,7 +47,7 @@ class OutputFormat(str, Enum):
 @app.command()
 def transcribe(
     video_path: str,
-    model_name: str = typer.Option("base", help="Whisper model to use"),
+    model: str = typer.Option("base", help="Whisper model to use"),
     output_format: OutputFormat = typer.Option(OutputFormat.CSV),
     output_path: str = typer.Option(None),
     verbose: int = typer.Option(
@@ -115,7 +115,7 @@ def transcribe(
 
             # Transcribe
             progress.update(transcribe_task, visible=True)
-            result = transcribe_audio(audio_path, progress, transcribe_task, model_name)
+            result = transcribe_audio(audio_path, progress, transcribe_task, model)
             logger.debug(f"Transcription result: {result}")
 
             # Perform diarization if requested
@@ -186,10 +186,10 @@ def transcribe_audio(
     audio_path: str,
     progress: Progress,
     task_id: int,
-    model_name: str = "base",
+    model: str = "base",
 ):
     """Transcribe audio using OpenAI Whisper."""
-    transcriber = Transcriber(model_name=model_name)
+    transcriber = Transcriber(model=model)
     return transcriber.transcribe(audio_path, progress, task_id)
 
 

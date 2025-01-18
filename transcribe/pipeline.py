@@ -17,10 +17,10 @@ class TranscriptionInfo:
 
 
 class WhisperPipeline:
-    def __init__(self, model_name: str, device: str, batch_size: int = 8):
+    def __init__(self, model: str, device: str, batch_size: int = 8):
         self.compute_types = {"cpu": "int8", "cuda": "float16"}
         self.model = faster_whisper.WhisperModel(
-            model_name, device=device, compute_type=self.compute_types[device]
+            model, device=device, compute_type=self.compute_types[device]
         )
         self.pipeline = (
             faster_whisper.BatchedInferencePipeline(self.model)
