@@ -19,13 +19,14 @@ from pathlib import Path
 import os
 import gevent
 import gevent.monkey
+import shutil
 
 gevent.monkey.patch_all(thread=False)
 
 from transcribe.logging import LogLevel, initialize_logging  # noqa: E402
 from transcribe.transcriber import Transcriber  # noqa: E402
 from transcribe.processing import AudioExtractor  # noqa: E402
-
+from transcribe.download import is_url, download_media  # noqa: E402
 
 warnings.simplefilter(action="ignore", category=FutureWarning)
 
@@ -60,9 +61,15 @@ def transcribe(
         False, "--diarize", "-d", help="Enable speaker diarization"
     ),
 ):
-    """Transcribe a video file with word-level timestamps and optional speaker diarization"""
+    """Transcribe a video file or URL with word-level timestamps and optional speaker diarization"""
+    downloaded_file = None
 
     try:
+        # Download if URL
+        if is_url(video_path):
+            downloaded_file = download_media(video_path)
+            video_path = str(downloaded_file)
+
         # Initialize logging
         log_level = LogLevel(min(verbose + 2, LogLevel.DEBUG))
         logger = initialize_logging(console, log_level)
@@ -90,7 +97,7 @@ def transcribe(
         # Set up progress tracking
         extract_task = progress.add_task("[cyan]Extracting audio...", total=None)
         transcribe_task = progress.add_task(
-            "[cyan]Transcribing...", total=1, visible=False
+            "[cyan]Transcribing...", total=None, visible=False
         )
         if diarize:
             logger.warning("Speaker diarization is experimental and may be inaccurate.")
@@ -103,7 +110,7 @@ def transcribe(
         audio_path = "output_audio.wav"
 
         with progress:
-            logger.info(f"Extracting audio from {video_path}")
+            logger.info(f'Extracting audio from "{video_path}"')
             audio_path = extract_audio(video_path, progress, extract_task)
 
             # Transcribe
@@ -126,7 +133,7 @@ def transcribe(
 
         # Use the console directly for the completion message
         console.print(
-            f"[green]Transcription completed and saved to {output_path}[/green]"
+            f' ✔️ Transcription completed and saved to [bold]"{output_path}"[/bold]'
         )
 
     finally:
@@ -136,6 +143,11 @@ def transcribe(
                 os.remove(audio_path)
             except Exception as e:
                 logger.warning(f"Failed to clean up temporary audio file: {str(e)}")
+
+        # Cleanup downloaded file
+        if downloaded_file and downloaded_file.exists():
+            downloaded_file.unlink()
+            shutil.rmtree(downloaded_file.parent, ignore_errors=True)
 
 
 def extract_audio(video_path: str, progress: Progress, task_id: int) -> Path:
@@ -191,7 +203,7 @@ def get_output_filename(
 def save_transcription(result: dict, output_path: Path, format: OutputFormat):
     """Save transcription in specified format."""
     try:
-        logger.info(f"Saving transcription to {output_path}")
+        logger.info(f'Saving transcription to "{output_path}"')
         with open(output_path, "w", encoding="utf-8") as f:
             if format == OutputFormat.CSV:
                 writer = csv.writer(f, quoting=csv.QUOTE_MINIMAL, escapechar="\\")

@@ -167,6 +167,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/c8/19/4ec628951a74043532ca2cf5d97b7b14863931476d117c471e8e2b1eb39f/urllib3-2.3.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/b4/c3/913cdd13ef3d882fa483981378a08cd0f018fd8dd95b6bf006b9bf1cfbc9/whisper-1.1.10.tar.gz
       - pypi: https://files.pythonhosted.org/packages/af/ba/1865d85212351ad160f19fb99808acf23aab9a0f8ff31c8c9f1b4d671fc9/yarl-1.18.3-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+      - pypi: https://files.pythonhosted.org/packages/a4/97/73eadf12412173dc518897a2715693e6caa73d6550ddf0b7c47c6f1e7703/yt_dlp-2025.1.15-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/fe/42/f8dbc2b9ad59e927940325a22d6d3931d630c3644dae7e2369ef5d9ba230/zope.event-5.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/9f/aa/1a28c02815fe1ca282b54f6705b9ddba20328fabdc37b8cf73fc06b172f0/zope.interface-7.2-cp311-cp311-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: .
@@ -3054,7 +3055,7 @@ packages:
   name: transcribe
   version: 0.1.0
   path: .
-  sha256: c5ae03a500dcaeced29fba39829732ad57020e7516bbf3f45277ab9a87d617af
+  sha256: eb70bb835a303c52319e33a4f646203087ecfc915e1033b528d4d544052d625f
   requires_dist:
   - faster-whisper>=1.1.1
   - ffmpeg-python>=0.2.0
@@ -3068,6 +3069,7 @@ packages:
   - torchaudio>=2.5.1
   - typer>=0.15.1
   - whisper>=1.1.10
+  - yt-dlp>=2025.1.15,<2026
   requires_python: '>=3.11,<3.12'
   editable: true
 - kind: pypi
@@ -3207,6 +3209,40 @@ packages:
   - idna>=2.0
   - multidict>=4.0
   - propcache>=0.2.0
+  requires_python: '>=3.9'
+- kind: pypi
+  name: yt-dlp
+  version: 2025.1.15
+  url: https://files.pythonhosted.org/packages/a4/97/73eadf12412173dc518897a2715693e6caa73d6550ddf0b7c47c6f1e7703/yt_dlp-2025.1.15-py3-none-any.whl
+  sha256: b8666b88e23c3fa5ee1e80920f4a9dfac7c405504a447214c0cf3d0c386edcfc
+  requires_dist:
+  - build ; extra == 'build'
+  - hatchling ; extra == 'build'
+  - pip ; extra == 'build'
+  - setuptools>=71.0.2 ; extra == 'build'
+  - wheel ; extra == 'build'
+  - curl-cffi!=0.6.*,<0.7.2,>=0.5.10 ; implementation_name == 'cpython' and os_name != 'nt' and extra == 'curl-cffi'
+  - curl-cffi==0.5.10 ; implementation_name == 'cpython' and os_name == 'nt' and extra == 'curl-cffi'
+  - brotli ; implementation_name == 'cpython' and extra == 'default'
+  - brotlicffi ; implementation_name != 'cpython' and extra == 'default'
+  - certifi ; extra == 'default'
+  - mutagen ; extra == 'default'
+  - pycryptodomex ; extra == 'default'
+  - requests<3,>=2.32.2 ; extra == 'default'
+  - urllib3<3,>=1.26.17 ; extra == 'default'
+  - websockets>=13.0 ; extra == 'default'
+  - autopep8~=2.0 ; extra == 'dev'
+  - pre-commit ; extra == 'dev'
+  - pytest-rerunfailures~=14.0 ; extra == 'dev'
+  - pytest~=8.1 ; extra == 'dev'
+  - ruff~=0.9.0 ; extra == 'dev'
+  - pyinstaller>=6.11.1 ; extra == 'pyinstaller'
+  - cffi ; extra == 'secretstorage'
+  - secretstorage ; extra == 'secretstorage'
+  - autopep8~=2.0 ; extra == 'static-analysis'
+  - ruff~=0.9.0 ; extra == 'static-analysis'
+  - pytest-rerunfailures~=14.0 ; extra == 'test'
+  - pytest~=8.1 ; extra == 'test'
   requires_python: '>=3.9'
 - kind: pypi
   name: zope-event

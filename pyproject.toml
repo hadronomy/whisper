@@ -16,7 +16,7 @@ dependencies = [
     "torch>=2.5.1",
     "torchaudio>=2.5.1",
     "typer>=0.15.1",
-    "whisper>=1.1.10",
+    "whisper>=1.1.10", "yt-dlp>=2025.1.15,<2026",
 ]
 
 [build-system]
