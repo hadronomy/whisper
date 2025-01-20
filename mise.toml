@@ -1,2 +1,3 @@
 [tools]
 # "cargo:pixi" = "latest"
+"cargo:taplo-cli" = "latest"
